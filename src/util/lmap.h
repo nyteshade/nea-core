@@ -7,26 +7,82 @@
 #include <exec/nodes.h>
 #include <string.h>
 
-#define LMAP_NONE       0
-#define LMAP_POINTER	1
-#define LMAP_STRING	2
-#define LMAP_DECIMAL	3
-#define LMAP_INTEGER	4
-#define LMAP_BOOLEAN	5
-#define LMAP_LMAP	6
-#define LMAP_LIST	7
+typedef enum LMapDataType {
+    LMAP_NONE = 0,
+    LMAP_POINTER,
+    LMAP_STRING,
+    LMAP_DECIMAL,
+    LMAP_INTEGER,
+    LMAP_LMBooleanEAN,
+    LMAP_LMAP,
+    LMAP_LIST
+} LMapDataType;
+
+typedef char * LMString;
+typedef void * LMPointer;
+typedef short  LMBoolean;
+
+#ifdef AMIGA_SMALL_TYPES
+typedef float   LMDecimal;
+typedef int     LMInteger;
+#else
+typedef double  LMDecimal;
+typedef long    LMInteger;
+#endif
+
+/** Letting the compiler know these will be defined below. */
+struct LMap;
+struct LMapData;
+struct LMapNode;
+struct LMapDataNode;
+
+/** A function typedef for use with iterator methods */
+typedef void (*LMapIterFn)(LMapNode *node, LMString key, LMapData *value);
+
+/** A function typedef for use with filtering methods */
+typedef LMBoolean (*LMapFilterFn)(LMapData *value, LMString key, LMap *map);
 
 /** Define the LMap as an alias for the struct List type */
 typedef struct LMap {
 	struct List list;
 	ULONG memRequirements;
+    
+    LMPointer (*getPointer)(LMap *map, LMString key);
+    LMString (*getString)(LMap *map, LMString key);
+    LMDecimal (*getDecimal)(LMap *map, LMString key);
+    LMInteger (*getInteger)(LMap *map, LMString key);
+    LMBoolean (*getBoolean)(LMap *map, LMString key);
+    LMap *(*getMap)(LMap *map, LMString key);
+    List *(*getList)(LMap *map, LMString key);
+
+    LMapNode *(*getNamedType)(LMap *map, LMString key, LMapNodeType type);
+    List *(*getAllValuesForKey)(LMap *map, LMString key);
+
+    LMPointer (*getPointerDefault)(LMap *map, LMString key, LMPointer pointer);
+    LMString (*getStringDefault)(LMap *map, LMString key, LMString string);
+    LMDecimal (*getDecimalDefault)(LMap *map, LMString key, LMDecimal decimal);
+    LMInteger (*getIntegerDefault)(LMap *map, LMString key, LMInteger integer);
+    LMBoolean (*getBooleanDefault)(LMap *map, LMString key, LMBoolean boolean);
+    LMap *(*getMapDefault)(LMap *map, LMString key, LMap *defaultMap);
+    List *(*getListDefault)(LMap *map, LMString key, List *list);
+    
+    void (*setPointer)(LMap *map, LMString key, LMPointer pointer);
+    void (*setString)(LMap *map, LMString key, LMString string);
+    void (*setDecimal)(LMap *map, LMString key, LMDecimal decimal);
+    void (*setInteger)(LMap *map, LMString key, LMInteger integer);
+    void (*setBoolean)(LMap *map, LMString key, LMBoolean boolean);
+    void (*setMap)(LMap *map, LMString key, LMap *map);
+    void (*setList)(List *list, LMString key, List *list);
+    
+    LMap *(*forEach)(LMap *map, LMapIterFn iterateFn);
+    LMap *(*filter)(LMap *map, LMapFilterFn filterFn);
+    
+    size_t (*size)(LMap *map);
+    LMBoolean (*hasTypeForKey)(LMap *map, LMString key, LMapDataType type);
 } LMap;
 
 /** Define a typedef for struct List to make it easier */
 typedef struct List List;
-
-/** A short integer designed to represent a LMap data type */
-typedef short LMapDataType;
 
 /** The data portion of the LMap */
 typedef struct LMapData {
@@ -36,13 +92,13 @@ typedef struct LMapData {
 	 list, string or pointer fields.
 	*/
 	union {
-		APTR		pointer;
-		STRPTR  string;
-		double	decimal;
-		long		integer;
-		BOOL		boolean;
-		LMap		*map;
-		List	  *list;		
+		LMPointer     pointer;
+		LMString      string;
+		LMDecimal	  decimal;
+		LMInteger	  integer;
+		LMBoolean	  boolean;
+		LMap	     *map;
+		List	     *list;		
 	} u;
 	LMapDataType type;
 } LMapData;
@@ -55,47 +111,54 @@ typedef struct LMapData {
 typedef struct LMapNode {
 	struct Node node;
 	LMapData data;
+    
+    LMBoolean (*hasNext)(LMapNode *node);
+    LMapNode *(*prev)(LMapNode *node);
+    LMapNode *(*next)(LMapNode *node);
+    LMapDataType (*type)(LMapNode *node);
 } LMapNode;
-
-/** A function typedef for use with iterator methods */
-typedef void (*LMapIterFn)(LMapNode *node, STRPTR key, LMapData *value);
-
-/** A function typedef for use with filtering methods */
-typedef BOOL (*LMapFilterFn)(LMapData *value, STRPTR key, LMap *map);
 
 /** Initializers */
 LMap *NewLMap(ULONG memReqs);
-LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, STRPTR key, APTR data);
+LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, LMString key, LMPointer data);
 LMapNode *CopyLMapNode(ULONG memReqs, LMapNode *source);
 
 /** Destructors */
 void FreeLMap(LMap *map);
 
 /** Getters */
-APTR		GetLMapPointer(LMap *map, STRPTR key, APTR def);
-STRPTR  GetLMapString(LMap *map, STRPTR key, STRPTR def);
-double  GetLMapDecimal(LMap *map, STRPTR key, double def);
-long		GetLMapInteger(LMap *map, STRPTR key, long def);
-BOOL		GetLMapBoolean(LMap *map, STRPTR key, BOOL def);
-LMap   *GetLMapMap(LMap *map, STRPTR key, LMap *lmap);
-List   *GetLMapList(LMap *map, STRPTR key, List *list);
+LMPointer	GetLMapPointer(LMap *map, LMString key);
+LMString    GetLMapString(LMap *map, LMString key);
+LMDecimal   GetLMapDecimal(LMap *map, LMString key);
+LMInteger	GetLMapInteger(LMap *map, LMString key);
+LMBoolean	    GetLMapBoolean(LMap *map, LMString key);
+LMap       *GetLMapMap(LMap *map, LMString key);
+List       *GetLMapList(LMap *map, LMString key);
+
+LMPointer	GetLMapPointerDefault(LMap *map, LMString key, LMPointer def);
+LMString    GetLMapStringDefault(LMap *map, LMString key, LMString def);
+LMDecimal   GetLMapDecimalDefault(LMap *map, LMString key, LMDecimal def);
+LMInteger	GetLMapIntegerDefault(LMap *map, LMString key, LMInteger def);
+LMBoolean	    GetLMapBooleanDefault(LMap *map, LMString key, LMBoolean def);
+LMap       *GetLMapMapDefault(LMap *map, LMString key, LMap *lmap);
+List       *GetLMapListDefault(LMap *map, LMString key, List *list);
 
 /** Setters */
-void SetLMapPointer(LMap *map, STRPTR key, APTR pointer);
-void SetLMapString(LMap *map, STRPTR key, STRPTR string);
-void SetLMapDecimal(LMap *map, STRPTR key, double decimal);
-void SetLMapInteger(LMap *map, STRPTR key, long integer);
-void SetLMapBoolean(LMap *map, STRPTR key, BOOL boolean);
-void SetLMapMap(LMap *map, STRPTR key, LMap *lmap);
-void SetLMapList(LMap *map, STRPTR key, List *list);
+void SetLMapPointer(LMap *map, LMString key, LMPointer pointer);
+void SetLMapString(LMap *map, LMString key, LMString string);
+void SetLMapDecimal(LMap *map, LMString key, LMDecimal decimal);
+void SetLMapInteger(LMap *map, LMString key, LMInteger integer);
+void SetLMapBoolean(LMap *map, LMString key, LMBoolean boolean);
+void SetLMapMap(LMap *map, LMString key, LMap *lmap);
+void SetLMapList(LMap *map, LMString key, List *list);
 
 /** Utility methods */
 size_t CountLMapNodes(LMap *map);
 void ForEachLMapNode(LMap *map, LMapIterFn fn);
 LMap *FilterLMap(LMap *map, LMapFilterFn fn);
-LMapNode *FindNamedType(LMap *map, STRPTR key, LMapDataType type);
+LMapNode *FindNamedType(LMap *map, LMString key, LMapDataType type);
 
-BOOL HasLMapTypeForKey(LMap *map, STRPTR key, LMapDataType type);
-List *GetAllLMapValuesForKey(LMap *map, STRPTR key);
+LMBoolean HasLMapTypeForKey(LMap *map, LMString key, LMapDataType type);
+List *GetAllLMapValuesForKey(LMap *map, LMString key);
 
 #endif

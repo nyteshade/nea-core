@@ -14,6 +14,9 @@
 
 #include "util/lmap.h"
 
+/* GLOBALS */
+APTR someMemoryBlock;
+
 /**
  * The nea.library, nea being short for Nyteshade Enterprises Amiga, code
  * dedicated to intialization when the library base is opened, occurs here.
@@ -23,7 +26,7 @@
  * @return [description]
  */
 int __saveds __UserLibInit(void) {
-    
+    someMemoryBlock = AllocVec(MEMF_ANY | MEMF_CLEAR, 4096);
 }
 
 /**
@@ -35,5 +38,5 @@ int __saveds __UserLibInit(void) {
  * @return [description]
  */
 int __saveds __UserLibCleanup(void) {
-    
+    if (someMemoryBlock) FreeVec(someMemoryBlock);
 }
