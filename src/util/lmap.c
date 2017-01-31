@@ -2,8 +2,8 @@
 
 #include <exec/memory.h>
 
-LMBoolean LMapNodeHasNext(LMapNode *node) {
-  return (LMBoolean)(node->node.ln_Succ != NULL);
+NEABoolean LMapNodeHasNext(LMapNode *node) {
+  return (NEABoolean)(node->node.ln_Succ != NULL);
 }
 
 LMapNode *LMapNodeNextNode(LMapNode *node) {
@@ -18,12 +18,18 @@ LMapDataType LMapNodeType(LMapNode *node) {
   return node->data.type;
 }
 
+LMapNode *LMapHeadNode(LMap *map) {
+  return (LMapNode *)map->list.lh_Head;
+}
+
 /** Initializers */
 LMap *NewLMap(ULONG memReqs) {
   LMap *map;
 
   map = (LMap *)AllocVec(sizeof(LMap), memReqs);
   NewList(&map->list);
+
+  map->head = LMapHeadNode;
 
   map->getPointer = GetLMapPointer;
   map->getString = GetLMapString;
@@ -61,7 +67,7 @@ LMap *NewLMap(ULONG memReqs) {
   return map;
 }
 
-LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, LMString key, LMPointer data) {
+LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, NEAString key, NEAPointer data) {
   LMapNode *node;
 
   node = (LMapNode *)AllocVec(sizeof(LMapNode), memReqs | MEMF_CLEAR);
@@ -74,13 +80,13 @@ LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, LMString key, LMPointer 
     case LMAP_POINTER:
       node->data.u.pointer = data; break;
     case LMAP_STRING:
-      node->data.u.string = (LMString)data; break;
+      node->data.u.string = (NEAString)data; break;
     case LMAP_DECIMAL:
-      node->data.u.decimal = *(LMDecimal *)data; break;
+      node->data.u.decimal = *(NEADecimal *)data; break;
     case LMAP_INTEGER:
-      node->data.u.integer = *(LMInteger *)data; break;
+      node->data.u.integer = *(NEAInteger *)data; break;
     case LMAP_BOOLEAN:
-      node->data.u.boolean = *(LMBoolean *)data ? TRUE : FALSE; break;
+      node->data.u.boolean = *(NEABoolean *)data ? TRUE : FALSE; break;
     case LMAP_LMAP:
       node->data.u.map = (LMap *)data; break;
     case LMAP_LIST:
@@ -101,7 +107,7 @@ LMapNode *CopyLMapNode(ULONG memReqs, LMapNode *source) {
   LMapNode *dest;
 
   dest = (LMapNode *)AllocVec(sizeof(LMapNode), memReqs | MEMF_CLEAR);
-  CopyMemQuick((LMPointer)&source->data, (LMPointer)&dest->data, sizeof(LMapData));
+  CopyMemQuick((NEAPointer)&source->data, (NEAPointer)&dest->data, sizeof(LMapData));
 
   return dest;
 }
@@ -122,7 +128,7 @@ void FreeLMap(LMap *map) {
   }
 }
 
-LMapNode *FindNamedType(LMap *map, LMString key, LMapDataType type) {
+LMapNode *FindNamedType(LMap *map, NEAString key, LMapDataType type) {
   struct LMapNode *node;
 
   node = (LMapNode *)FindName((struct List *)map, key);
@@ -140,71 +146,71 @@ LMapNode *FindNamedType(LMap *map, LMString key, LMapDataType type) {
 }
 
 /** Getters */
-LMPointer GetLMapPointer(LMap *map, LMString key) {
+NEAPointer GetLMapPointer(LMap *map, NEAString key) {
   return GetLMapPointerDefault(map, key, NULL);
 }
 
-LMString GetLMapString(LMap *map, LMString key) {
+NEAString GetLMapString(LMap *map, NEAString key) {
   return GetLMapStringDefault(map, key, NULL);
 }
 
-LMDecimal GetLMapDecimal(LMap *map, LMString key) {
+NEADecimal GetLMapDecimal(LMap *map, NEAString key) {
   return GetLMapDecimalDefault(map, key, -1.);
 }
 
-LMInteger GetLMapInteger(LMap *map, LMString key) {
+NEAInteger GetLMapInteger(LMap *map, NEAString key) {
   return GetLMapIntegerDefault(map, key, -1);
 }
 
-LMBoolean GetLMapBoolean(LMap *map, LMString key) {
+NEABoolean GetLMapBoolean(LMap *map, NEAString key) {
   return GetLMapBooleanDefault(map, key, -1);
 }
 
-LMap *GetLMapMap(LMap *map, LMString key) {
+LMap *GetLMapMap(LMap *map, NEAString key) {
   return GetLMapMapDefault(map, key, NULL);
 }
 
-List *GetLMapList(LMap *map, LMString key) {
+List *GetLMapList(LMap *map, NEAString key) {
   return GetLMapListDefault(map, key, NULL);
 }
 
-LMPointer GetLMapPointerDefault(LMap *map, LMString key, LMPointer def) {
+NEAPointer GetLMapPointerDefault(LMap *map, NEAString key, NEAPointer def) {
   LMapNode *node = FindNamedType(map, key, LMAP_POINTER);
   return node ? node : def;
 }
 
-LMString GetLMapStringDefault(LMap *map, LMString key, LMString def) {
+NEAString GetLMapStringDefault(LMap *map, NEAString key, NEAString def) {
   LMapNode *node = FindNamedType(map, key, LMAP_STRING);
   return node ? node->data.u.string : def;
 }
 
-LMDecimal GetLMapDecimalDefault(LMap *map, LMString key, LMDecimal def) {
+NEADecimal GetLMapDecimalDefault(LMap *map, NEAString key, NEADecimal def) {
   LMapNode *node = FindNamedType(map, key, LMAP_DECIMAL);
   return node ? node->data.u.decimal : def;
 }
 
-LMInteger GetLMapIntegerDefault(LMap *map, LMString key, LMInteger def) {
+NEAInteger GetLMapIntegerDefault(LMap *map, NEAString key, NEAInteger def) {
   LMapNode *node = FindNamedType(map, key, LMAP_INTEGER);
   return node ? node->data.u.integer : def;
 }
 
-LMBoolean GetLMapBooleanDefault(LMap *map, LMString key, LMBoolean def) {
+NEABoolean GetLMapBooleanDefault(LMap *map, NEAString key, NEABoolean def) {
   LMapNode *node = FindNamedType(map, key, LMAP_BOOLEAN);
-  return (LMBoolean)(node ? node->data.u.boolean : def);
+  return (NEABoolean)(node ? node->data.u.boolean : def);
 }
 
-LMap *GetLMapMapDefault(LMap *map, LMString key, LMap *def) {
+LMap *GetLMapMapDefault(LMap *map, NEAString key, LMap *def) {
   LMapNode *node = FindNamedType(map, key, LMAP_LMAP);
   return node ? node->data.u.map : def;
 }
 
-List *GetLMapListDefault(LMap *map, LMString key, List *def) {
+List *GetLMapListDefault(LMap *map, NEAString key, List *def) {
   LMapNode *node = FindNamedType(map, key, LMAP_LIST);
   return node ? node->data.u.list : def;
 }
 
 /** Setters */
-void SetLMapPointer(LMap *map, LMString key, LMPointer pointer) {
+void SetLMapPointer(LMap *map, NEAString key, NEAPointer pointer) {
   LMapNode *node = FindNamedType(map, key, LMAP_POINTER);
   if (node) {
     node->data.u.pointer = pointer;
@@ -215,68 +221,68 @@ void SetLMapPointer(LMap *map, LMString key, LMPointer pointer) {
   }
 }
 
-void SetLMapString(LMap *map, LMString key, LMString string) {
+void SetLMapString(LMap *map, NEAString key, NEAString string) {
   LMapNode *node = FindNamedType(map, key, LMAP_STRING);
   if (node) {
     node->data.u.string = string;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_STRING, key, (LMPointer)string);
+    node = NewLMapNode(MEMF_ANY, LMAP_STRING, key, (NEAPointer)string);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapDecimal(LMap *map, LMString key, LMDecimal decimal) {
+void SetLMapDecimal(LMap *map, NEAString key, NEADecimal decimal) {
   LMapNode *node = FindNamedType(map, key, LMAP_DECIMAL);
   if (node) {
     node->data.u.decimal = decimal;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_DECIMAL, key, (LMPointer)&decimal);
+    node = NewLMapNode(MEMF_ANY, LMAP_DECIMAL, key, (NEADecimal *)&decimal);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapInteger(LMap *map, LMString key, LMInteger integer) {
+void SetLMapInteger(LMap *map, NEAString key, NEAInteger integer) {
   LMapNode *node = FindNamedType(map, key, LMAP_INTEGER);
   if (node) {
     node->data.u.integer = integer;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_INTEGER, key, (LMPointer)&integer);
+    node = NewLMapNode(MEMF_ANY, LMAP_INTEGER, key, (NEAPointer)&integer);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapBoolean(LMap *map, LMString key, LMBoolean boolean) {
+void SetLMapBoolean(LMap *map, NEAString key, NEABoolean boolean) {
   LMapNode *node = FindNamedType(map, key, LMAP_BOOLEAN);
   if (node) {
     node->data.u.boolean = boolean;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_POINTER, key, (LMPointer)&boolean);
+    node = NewLMapNode(MEMF_ANY, LMAP_POINTER, key, (NEAPointer)&boolean);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapMap(LMap *map, LMString key, LMap *lmap) {
+void SetLMapMap(LMap *map, NEAString key, LMap *lmap) {
   LMapNode *node = FindNamedType(map, key, LMAP_LMAP);
   if (node) {
     node->data.u.map = lmap;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_LMAP, key, (LMPointer)lmap);
+    node = NewLMapNode(MEMF_ANY, LMAP_LMAP, key, (NEAPointer)lmap);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapList(LMap *map, LMString key, List *list) {
+void SetLMapList(LMap *map, NEAString key, List *list) {
   LMapNode *node = FindNamedType(map, key, LMAP_LIST);
   if (node) {
     node->data.u.list = list;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_LIST, key, (LMPointer)list);
+    node = NewLMapNode(MEMF_ANY, LMAP_LIST, key, (NEAPointer)list);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
@@ -313,7 +319,7 @@ LMap *FilterLMap(LMap *map, LMapFilterFn fn) {
   LMap *newMap;
   LMapNode *newNode;
   LMapNode *node;
-  LMBoolean include;
+  NEABoolean include;
 
   newMap = NewLMap(map->memRequirements);
 
@@ -332,7 +338,7 @@ LMap *FilterLMap(LMap *map, LMapFilterFn fn) {
   return newMap;
 }
 
-LMBoolean HasLMapTypeForKey(LMap *map, LMString key, LMapDataType type) {
+NEABoolean HasLMapTypeForKey(LMap *map, NEAString key, LMapDataType type) {
   struct LMapNode *node;
 
   node = (LMapNode *)FindName((struct List *)map, key);
@@ -350,7 +356,7 @@ LMBoolean HasLMapTypeForKey(LMap *map, LMString key, LMapDataType type) {
 
 }
 
-List *GetAllLMapValuesForKey(LMap *map, LMString key) {
+List *GetAllLMapValuesForKey(LMap *map, NEAString key) {
   struct List *list;
   LMapNode *newNode;
   LMapNode *node;
