@@ -8210,3 +8210,22 @@ prev	/Users/briharrison/Dropbox/Code/nea-core/src/util/lmap.h	/^    LMapNode *(*
 next	/Users/briharrison/Dropbox/Code/nea-core/src/util/lmap.h	/^    LMapNode *(*next)(LMapNode *node);$/;"	member	line:117	struct:LMapNode
 type	/Users/briharrison/Dropbox/Code/nea-core/src/util/lmap.h	/^    LMapDataType (*type)(LMapNode *node);$/;"	member	line:118	struct:LMapNode
 LMapNode	/Users/briharrison/Dropbox/Code/nea-core/src/util/lmap.h	/^} LMapNode;$/;"	typedef	line:119	typeref:struct:LMapNode
+POINT_ZERO_INT	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEAPoint POINT_ZERO_INT = {$/;"	variable	line:3
+POINT_ZERO_DEC	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEAPoint POINT_ZERO_DEC = {$/;"	variable	line:7
+SIZE_ZERO_INT	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEASize SIZE_ZERO_INT = {$/;"	variable	line:11
+SIZE_ZERO_DEC	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEASize SIZE_ZERO_DEC = {$/;"	variable	line:14
+RECT_ZERO_INT	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEARect RECT_ZERO_INT = {$/;"	variable	line:18
+RECT_ZERO_DEC	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEARect RECT_ZERO_DEC = {$/;"	variable	line:21
+NEA_NTSC_HIRES	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEASize NEA_NTSC_HIRES = {$/;"	variable	line:26
+NEA_NTSC_HIRES_LACED	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^const NEASize NEA_NTSC_HIRES_LACED = {$/;"	variable	line:29
+NewPointI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEAPoint *NewPointI(NEAInteger x, NEAInteger y, NEAInteger z) {$/;"	function	line:33	signature:(NEAInteger x, NEAInteger y, NEAInteger z)
+NewPointD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEAPoint *NewPointD(NEADecimal x, NEADecimal y, NEADecimal z) {$/;"	function	line:42	signature:(NEADecimal x, NEADecimal y, NEADecimal z)
+SetPointI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEAPoint *SetPointI(NEAPoint *point, NEAInteger x, NEAInteger y, NEAInteger z) {$/;"	function	line:51	signature:(NEAPoint *point, NEAInteger x, NEAInteger y, NEAInteger z)
+SetPointD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEAPoint *SetPointD(NEAPoint *point, NEADecimal x, NEADecimal y, NEADecimal z) {$/;"	function	line:60	signature:(NEAPoint *point, NEADecimal x, NEADecimal y, NEADecimal z)
+NewSizeI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEASize *NewSizeI(NEAInteger width, NEAInteger height) {$/;"	function	line:69	signature:(NEAInteger width, NEAInteger height)
+NewSizeD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEASize *NewSizeD(NEADecimal width, NEADecimal height) {$/;"	function	line:77	signature:(NEADecimal width, NEADecimal height)
+SetSizeI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEASize *SetSizeI(NEASize *size, NEAInteger width, NEAInteger height) {$/;"	function	line:85	signature:(NEASize *size, NEAInteger width, NEAInteger height)
+SetSizeD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEASize *SetSizeD(NEASize *size, NEADecimal width, NEADecimal height) {$/;"	function	line:93	signature:(NEASize *size, NEADecimal width, NEADecimal height)
+NewRectI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectI($/;"	function	line:101	signature:( NEAInteger x, NEAInteger y, NEAInteger width, NEAInteger height )
+NewRectWithPointSize	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectWithPointSize(NEAPoint *point, NEASize *size) {$/;"	function	line:118	signature:(NEAPoint *point, NEASize *size)
+NewRectD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectD($/;"	function	line:149	signature:( NEADecimal x, NEADecimal y, NEADecimal width, NEADecimal height )

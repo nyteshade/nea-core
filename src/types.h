@@ -73,18 +73,28 @@ extern const NEASize NEA_NTSC_HIRES_LACED;  /* { 640, 400, NEANUM_INTEGER } */
 /* Point allocation methods that allocate memory that needs to be freed */
 NEAPoint *NewPointI(NEAInteger x, NEAInteger y, NEAInteger z);
 NEAPoint *NewPointD(NEADecimal x, NEADecimal y, NEADecimal z);
+NEAPoint *NewPointIP(NEAInteger *x, NEAInteger *y, NEAInteger *z);
+NEAPoint *NewPointDP(NEADecimal *x, NEADecimal *y, NEADecimal *z);
 
 /* Point setters that do not allocate memory and work with an existing copy */
 NEAPoint *SetPointI(NEAPoint *p, NEAInteger x, NEAInteger y, NEAInteger z);
 NEAPoint *SetPointD(NEAPoint *p, NEADecimal x, NEADecimal y, NEADecimal z);
+NEAPoint *SetPointIP(NEAPoint *p, NEAInteger *x, NEAInteger *y, NEAInteger *z);
+NEAPoint *SetPointDP(NEAPoint *p, NEADecimal *x, NEADecimal *y, NEADecimal *z);
+NEAPoint *SetPointFromPoint(NEAPoint *dest, NEAPoint *source);
 
 /* Size allocation methods that allocate memory that needs to be freed */
 NEASize  *NewSizeI(NEAInteger width, NEAInteger height);
 NEASize  *NewSizeD(NEADecimal width, NEADecimal height);
+NEASize  *NewSizeIP(NEAInteger *width, NEAInteger *height);
+NEASize  *NewSizeDP(NEADecimal *width, NEADecimal *height);
 
 /* Size setters that do not allocate memory and work with an existing copy */
 NEASize  *SetSizeI(NEASize *size, NEAInteger width, NEAInteger height);
 NEASize  *SetSizeD(NEASize *size, NEADecimal width, NEADecimal height);
+NEASize  *SetSizeIP(NEASize *size, NEAInteger *width, NEAInteger *height);
+NEASize  *SetSizeDP(NEASize *size, NEADecimal *width, NEADecimal *height);
+NEASize  *SetSizeFromSize(NEASize *dest, NEASize *source);
 
 /* Rect allocation methods that allocate memory that needs to be freed */
 NEARect *NewRectI(
@@ -99,9 +109,9 @@ NEARect *NewRectD(
   NEADecimal width,
   NEADecimal height
 );
-NEARect *NewRectWithPointSize(NEAPoint point, NEASize size);
-NEARect *NewRectWithSizeI(NEAInteger x, NEAInteger y, NEASize size);
-NEARect *NewRectWithSizeD(NEADecimal x, NEADecimal y, NEASize size);
+NEARect *NewRectWithPointSize(NEAPoint *point, NEASize *size);
+NEARect *NewRectIWithSize(NEAInteger x, NEAInteger y, NEASize *size);
+NEARect *NewRectDWithSize(NEADecimal x, NEADecimal y, NEASize *size);
 
 /* Rect setters that do not allocate memory and work with an existing copy */
 NEARect *SetRectI(
@@ -118,18 +128,18 @@ NEARect *SetRectD(
   NEADecimal width,
   NEADecimal height
 );
-NEARect *SetRectWithPointSize(NEARect *rect, NEAPoint point, NEASize size);
-NEARect *SetRectWithSizeI(
+NEARect *SetRectWithPointSize(NEARect *rect, NEAPoint *point, NEASize *size);
+NEARect *SetRectIWithSize(
   NEARect *rect,
   NEAInteger x,
   NEAInteger y,
-  NEASize size
+  NEASize *size
 );
-NEARect *SetRectWithSizeD(
+NEARect *SetRectDWithSize(
   NEARect *rect,
   NEADecimal x,
   NEADecimal y,
-  NEASize size
+  NEASize *size
 );
 
 #endif
