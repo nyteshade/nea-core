@@ -1,0 +1,6 @@
+##base _NEABase
+##bias 30
+##public
+sayHi(length,string)(D0,A0)
+##private
+##end

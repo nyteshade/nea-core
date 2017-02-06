@@ -47,7 +47,7 @@ __UserLibInit( void )
 
     if (UtilityBase = OpenLibrary( "utility.library", 0L ))
         retval = 0;
-
+        
     return retval;
 }
 
@@ -62,3 +62,12 @@ __UserLibCleanup( void )
 {
     CloseLibrary( UtilityBase );
 }
+
+
+
+
+
+
+
+
+

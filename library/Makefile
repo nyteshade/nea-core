@@ -23,9 +23,9 @@ C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE
 
 LINKER=             SC:C/SLINK
 
-C_SOURCES=          nea_lib.c <rest of c files>
+C_SOURCES=          nea_lib.c nea.c
 
-OBJECTS=            nea_lib.o <rest of c files>.o
+OBJECTS=            nea_lib.o nea.o
 LIBS=               LIB:sc.lib LIB:amiga.lib
 
 LIBENT=             LIB:libent.o
