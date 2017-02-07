@@ -16,7 +16,8 @@ LIBFILE=            $(MODNAME).library
 
 FD_CONV=            SC:C/FD2PRAGMA
 FD_FILE=            $(MODNAME)_lib.fd
-PRAGMA_FILE=        pragma/$(MODNAME).h
+PRAGMA_FILE=        pragmas/$(MODNAME)_pragmas.h
+PROTO_FILE=         proto/$(MODNAME).h
 
 C_COMPILER=         SC:C/SC
 C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE
@@ -71,6 +72,16 @@ clean:
 #
 reload:
     @copy $(LIBFILE) LIBS:
-    @copy $(FD_FILE) FD:
+    @copy $(PROTO_FILE) INCLUDE:proto/
+    @copy $(PRAGMA_FILE) INCLUDE:pragmas/
+    #@copy $(FD_FILE) FD:
     @flushlibs
     @version $(LIBFILE)
+
+
+
+
+
+
+
+
