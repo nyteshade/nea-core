@@ -12,25 +12,26 @@ MODNAME=            nea
 VERSION=            37
 REVISION=           0
 
+IDIR=               /src
 LIBFILE=            $(MODNAME).library
 
 FD_CONV=            SC:C/FD2PRAGMA
 FD_FILE=            $(MODNAME)_lib.fd
-PRAGMA_FILE=        pragmas/$(MODNAME)_pragmas.h
-PROTO_FILE=         proto/$(MODNAME).h
+PRAGMA_FILE=        /src/nea/pragmas/$(MODNAME)_pragmas.h
+PROTO_FILE=         /src/nea/proto/$(MODNAME).h
 
 C_COMPILER=         SC:C/SC
-C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE
+C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
 
 LINKER=             SC:C/SLINK
 
-C_SOURCES=          nea_lib.c nea.c
+C_SOURCES=          nea_lib.c nea.c $(IDIR)/nea/util/lmap.c $(IDIR)/types.c
 
-OBJECTS=            nea_lib.o nea.o
-LIBS=               LIB:sc.lib LIB:amiga.lib
+OBJECTS=            nea_lib.o nea.o $(IDIR)/nea/types.o $(IDIR)/nea/util/lmap.o
+LIBS=               LIB:sc.lib LIB:amiga.lib LIB:scm.lib
 
 LIBENT=             LIB:libent.o
-LIBINIT=            LIB:libinit.o
+LIBINIT=            LIB:libinitr.o
 LIBPREFIX=          _LIB
 
 ##############################################################################

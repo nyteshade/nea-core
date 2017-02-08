@@ -1,4 +1,7 @@
-#include "types.h"
+#include <exec/memory.h>
+#include <clib/exec_protos.h>
+#include <nea/types.h>
+#include <string.h>
 
 const NEAPoint POINT_ZERO_INT = {
   (NEAInteger)0, (NEAInteger)0, (NEAInteger)0, NEANUM_INTEGER
@@ -67,19 +70,19 @@ NEAPoint *SetPointDP(NEAPoint *point, NEADecimal *x, NEADecimal *y, NEADecimal *
 }
 
 NEAPoint *SetPointFromPoint(NEAPoint *dest, NEAPoint *source) {
-  memset(size, 0, sizeof(NEAPoint));
+  memset(dest, 0, sizeof(NEAPoint));
   switch(source->type) {
   case NEANUM_INTEGER:
-    SetPointI(dest, source.x.i, source.y.i, source.z.i);
+    SetPointI(dest, source->x.i, source->y.i, source->z.i);
     break;
   case NEANUM_DECIMAL:
-    SetPointD(dest, source.x.d, source.y.d, source.z.d);
+    SetPointD(dest, source->x.d, source->y.d, source->z.d);
     break;
   case NEANUM_INTEGER_PTR:
-    SetPointIP(dest, source.x.I, source.y.I, source.z.I);
+    SetPointIP(dest, source->x.I, source->y.I, source->z.I);
     break;
   case NEANUM_DECIMAL_PTR:
-    SetPointDP(dest, source.x.D, source.y.D, source.z.D);
+    SetPointDP(dest, source->x.D, source->y.D, source->z.D);
     break;
   };
   return dest;
@@ -87,25 +90,25 @@ NEAPoint *SetPointFromPoint(NEAPoint *dest, NEAPoint *source) {
 
 
 NEAPoint *NewPointI(NEAInteger x, NEAInteger y, NEAInteger z) {
-    NEAPoint *point = (NEAPoint *)AllocMem(sizeof(NEAPoint), NEANUM_MEMFLAGS);
+    NEAPoint *point = (NEAPoint *)AllocVec(sizeof(NEAPoint), NEANUM_MEMFLAGS);
     SetPointI(point, x, y, z);
     return point;
 }
 
 NEAPoint *NewPointD(NEADecimal x, NEADecimal y, NEADecimal z) {
-    NEAPoint *point = (NEAPoint *)AllocMem(sizeof(NEAPoint), NEANUM_MEMFLAGS);
+    NEAPoint *point = (NEAPoint *)AllocVec(sizeof(NEAPoint), NEANUM_MEMFLAGS);
     SetPointD(point, x, y, z);
     return point;
 }
 
 NEAPoint *NewPointIP(NEAInteger *x, NEAInteger *y, NEAInteger *z) {
-    NEAPoint *point = (NEAPoint *)AllocMem(sizeof(NEAPoint), NEANUM_MEMFLAGS);
+    NEAPoint *point = (NEAPoint *)AllocVec(sizeof(NEAPoint), NEANUM_MEMFLAGS);
     SetPointIP(point, x, y, z);
     return point;
 }
 
 NEAPoint *NewPointDP(NEADecimal *x, NEADecimal *y, NEADecimal *z) {
-    NEAPoint *point = (NEAPoint *)AllocMem(sizeof(NEAPoint), NEANUM_MEMFLAGS);
+    NEAPoint *point = (NEAPoint *)AllocVec(sizeof(NEAPoint), NEANUM_MEMFLAGS);
     SetPointDP(point, x, y, z);
     return point;
 }
@@ -143,44 +146,44 @@ NEASize *SetSizeDP(NEASize *size, NEADecimal *width, NEADecimal *height) {
 }
 
 NEASize *SetSizeFromSize(NEASize *dest, NEASize *source) {
-  memset(size, 0, sizeof(NEASize));
+  memset(dest, 0, sizeof(NEASize));
   switch(source->type) {
   case NEANUM_INTEGER:
-    SetSizeI(dest, source.width.i, source.height.i);
+    SetSizeI(dest, source->width.i, source->height.i);
     break;
   case NEANUM_DECIMAL:
-    SetSizeD(dest, source.width.d, source.height.d);
+    SetSizeD(dest, source->width.d, source->height.d);
     break;
   case NEANUM_INTEGER_PTR:
-    SetSizeIP(dest, source.width.I, source.height.I);
+    SetSizeIP(dest, source->width.I, source->height.I);
     break;
   case NEANUM_DECIMAL_PTR:
-    SetSizeDP(dest, source.width.D, source.height.D);
+    SetSizeDP(dest, source->width.D, source->height.D);
     break;
   };
   return dest;
 }
 
 NEASize *NewSizeI(NEAInteger width, NEAInteger height) {
-    NEASize *size = (NEASize *)AllocMem(sizeof(NEASize), NEANUM_MEMFLAGS);
+    NEASize *size = (NEASize *)AllocVec(sizeof(NEASize), NEANUM_MEMFLAGS);
     SetSizeI(size, width, height);
     return size;
 }
 
 NEASize *NewSizeD(NEADecimal width, NEADecimal height) {
-    NEASize *size = (NEASize *)AllocMem(sizeof(NEASize), NEANUM_MEMFLAGS);
+    NEASize *size = (NEASize *)AllocVec(sizeof(NEASize), NEANUM_MEMFLAGS);
     SetSizeD(size, width, height);
     return size;
 }
 
 NEASize *NewSizeIP(NEAInteger *width, NEAInteger *height) {
-    NEASize *size = (NEASize *)AllocMem(sizeof(NEASize), NEANUM_MEMFLAGS);
+    NEASize *size = (NEASize *)AllocVec(sizeof(NEASize), NEANUM_MEMFLAGS);
     SetSizeIP(size, width, height);
     return size;
 }
 
 NEASize *NewSizeDP(NEADecimal *width, NEADecimal *height) {
-    NEASize *size = (NEASize *)AllocMem(sizeof(NEASize), NEANUM_MEMFLAGS);
+    NEASize *size = (NEASize *)AllocVec(sizeof(NEASize), NEANUM_MEMFLAGS);
     SetSizeDP(size, width, height);
     return size;
 }
@@ -287,4 +290,9 @@ NEARect *SetRectDWithSize(
   SetSizeFromSize(&rect->size, size);
   return rect;
 }
+
+
+
+
+
 

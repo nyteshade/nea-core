@@ -1,5 +1,4 @@
-#include "lmap.h"
-
+#include <nea/util/lmap.h>
 #include <exec/memory.h>
 
 NEABoolean LMapNodeHasNext(LMapNode *node) {

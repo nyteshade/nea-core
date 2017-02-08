@@ -53,7 +53,7 @@ typedef struct NEASize {
 typedef struct NEARect {
   NEAPoint position;
   NEASize size;
-  NEANumber type;
+  NEANumberType type;
 } NEARect;
 
 /** Some sane zero values for the numbers above */

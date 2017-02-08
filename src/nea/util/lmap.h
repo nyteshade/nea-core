@@ -7,7 +7,7 @@
 #include <exec/nodes.h>
 #include <string.h>
 
-#include "../types.h"
+#include <nea/types.h>
 
 typedef enum LMapDataType {
     LMAP_NONE = 0,

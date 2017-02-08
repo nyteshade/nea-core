@@ -2,5 +2,6 @@
 ##bias 30
 ##public
 sayHi(length,string)(D0,A0)
+NewPointI(x,y,z)(D0,D1,D2)
 ##private
 ##end
