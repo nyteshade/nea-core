@@ -162,7 +162,7 @@ NEAInteger GetLMapInteger(LMap *map, NEAString key) {
 }
 
 NEABoolean GetLMapBoolean(LMap *map, NEAString key) {
-  return GetLMapBooleanDefault(map, key, -1);
+  return GetLMapBooleanDefault(map, key, FALSE);
 }
 
 LMap *GetLMapMap(LMap *map, NEAString key) {

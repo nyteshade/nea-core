@@ -3,5 +3,10 @@
 ##public
 sayHi(length,string)(D0,A0)
 NewPointI(x,y,z)(D0,D1,D2)
+SetFString(string,fstring)(A0,A1)
+DupFString(fstring,dupStringToo)(A0,D0)
+FreeFString(fstring)(A0)
+WriteFString(filePtr,fstring)(D0,A0)
+ReadFString(filePtr,fstring)(D0,A0)
 ##private
 ##end

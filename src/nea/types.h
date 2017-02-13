@@ -3,37 +3,48 @@
 
 #include <exec/memory.h>
 
-typedef char   * NEAString;
-typedef void   * NEAPointer;
-typedef short    NEABoolean;
+typedef char           * NEAString;
+typedef void           * NEAPointer;
+typedef unsigned char    NEABoolean;
+typedef unsigned char    NEAByte;
+typedef short            NEAWord;
+typedef unsigned short   NEAUWord;
 
 #ifndef NEANUM_MEMFLAGS
 #define NEANUM_MEMFLAGS (MEMF_ANY|MEMF_CLEAR)
 #endif
 
 #ifdef AMIGA_SMALL_TYPES
-typedef float    NEADecimal;
-typedef float  * NEADecimalPtr;
-typedef int      NEAInteger;
-typedef int    * NEAIntegerPtr;
+typedef float             NEADecimal;
+typedef float           * NEADecimalPtr;
+typedef int               NEAInteger;
+typedef int             * NEAIntegerPtr;
+typedef unsigned int      NEAUInteger;
+typedef unsigned int    * NEAUIntegerPtr;
 #else
-typedef double   NEADecimal;
-typedef double * NEADecimalPtr;
-typedef long     NEAInteger;
-typedef long   * NEAIntegerPtr;
+typedef double            NEADecimal;
+typedef double          * NEADecimalPtr;
+typedef long              NEAInteger;
+typedef long            * NEAIntegerPtr;
+typedef unsigned long     NEAUInteger;
+typedef unsigned long   * NEAUIntegerPtr;
 #endif
 
 typedef enum NEANumberType {
-  NEANUM_INTEGER = 0,
-  NEANUM_DECIMAL,
-  NEANUM_INTEGER_PTR,
-  NEANUM_DECIMAL_PTR
+  NEANUM_INTEGER = 1,
+  NEANUM_UINTEGER = 2,
+  NEANUM_INTEGER_PTR = 4,
+  NEANUM_UINTEGER_PTR = 8,
+  NEANUM_DECIMAL = 16,
+  NEANUM_DECIMAL_PTR = 32,
 } NEANumberType;
 
 typedef union NEANumber {
   NEAInteger i;
+  NEAUInteger ui;
   NEADecimal d;
   NEAIntegerPtr I;
+  NEAUIntegerPtr UI;
   NEADecimalPtr D;
 } NEANumber;
 
