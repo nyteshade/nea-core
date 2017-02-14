@@ -1,12 +1,14 @@
 #include <nea/file/strings.h>
 #include <string.h>
 
+/* -------------------------------------------------------------------------*/
+
 NEAFString * __asm __saveds SetFString(
   register __a0 NEAString string,
   register __a1 NEAFString *fstring
 ) {
   if (!fstring) {
-    fstring = (NEAFString *)AllocVec(sizeof(NEAFString), NEA_FILE_MEMF);
+    fstring = (NEAFString *)AllocVec(sizeof(NEAFString), NEA_MEMF_FLAGS);
     if (!fstring) {
       return NULL;
     }
@@ -26,20 +28,26 @@ NEAFString * __asm __saveds LIBSetFString(
   return SetFString(string, fstring);
 }
 
-/* -----------------------------------------------*/
+/* -------------------------------------------------------------------------*/
 
 NEAFString * __asm __saveds DupFString(
   register __a0 NEAFString *fstring,
   register __d0 NEABoolean dupStringToo
 ) {
-  NEAFString *result = (NEAFString *)AllocVec(sizeof(NEAFString), NEA_FILE_MEMF);
+  NEAFString *result = (NEAFString *)AllocVec(
+    sizeof(NEAFString), 
+    NEA_MEMF_FLAGS
+  );
   if (!result) {
     return NULL;
   }
   
   result->length = fstring->length;
   if (dupStringToo) {
-    result->value = (NEAString)AllocVec(sizeof(char) * fstring->length, NEA_FILE_MEMF);
+    result->value = (NEAString)AllocVec(
+      sizeof(char) * fstring->length, 
+      NEA_MEMF_FLAGS
+    );
     if (!result->value) {
       FreeVec(result);
       return NULL;
@@ -62,7 +70,7 @@ NEAFString * __asm __saveds LIBDupFString(
   return DupFString(fstring, dupStringToo);
 }
 
-/* -----------------------------------------------*/
+/* -------------------------------------------------------------------------*/
 
 void __asm __saveds FreeFString(
   register __a0 NEAFString *fstring
@@ -82,7 +90,7 @@ void __asm __saveds LIBFreeFString(
   FreeFString(fstring);
 }
 
-/* -----------------------------------------------*/
+/* -------------------------------------------------------------------------*/
 
 LONG __asm __saveds WriteFString(
   register __d0 BPTR filePtr,
@@ -106,7 +114,7 @@ LONG __asm __saveds LIBWriteFString(
   return WriteFString(filePtr, fstring);
 }
 
-/* -----------------------------------------------*/
+/* -------------------------------------------------------------------------*/
 
 NEAFString * __asm __saveds ReadFString(
   register __d0 BPTR filePtr,
@@ -115,7 +123,7 @@ NEAFString * __asm __saveds ReadFString(
   NEAFString *result = fstring;
   
   if (!result) {
-    result = (NEAFString*)AllocVec(sizeof(NEAFString), NEA_FILE_MEMF);
+    result = (NEAFString*)AllocVec(sizeof(NEAFString), NEA_MEMF_FLAGS);
     if (!result) {
       return NULL;
     }
@@ -123,7 +131,10 @@ NEAFString * __asm __saveds ReadFString(
   
   Read(filePtr, &result->length, sizeof(NEAInteger));
   if (!fstring) {
-    result->value = (NEAString)AllocVec(sizeof(NEAByte) * result->length, NEA_FILE_MEMF); 
+    result->value = (NEAString)AllocVec(
+      sizeof(NEAByte) * result->length, 
+      NEA_MEMF_FLAGS
+    ); 
     if (!result->value) {
       FreeVec(result);
       return NULL;
@@ -141,17 +152,5 @@ NEAFString * __asm __saveds LIBReadFString(
   return ReadFString(filePtr, fstring);
 }
 
-
-/* -----------------------------------------------*/
-
-/* -----------------------------------------------*/
-
-/* -----------------------------------------------*/
-
-/* -----------------------------------------------*/
-
-/* -----------------------------------------------*/
-
-/* -----------------------------------------------*/
-
+/* -------------------------------------------------------------------------*/
 

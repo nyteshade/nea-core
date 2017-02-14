@@ -8229,3 +8229,21 @@ SetSizeD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEASize *SetSize
 NewRectI	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectI($/;"	function	line:101	signature:( NEAInteger x, NEAInteger y, NEAInteger width, NEAInteger height )
 NewRectWithPointSize	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectWithPointSize(NEAPoint *point, NEASize *size) {$/;"	function	line:118	signature:(NEAPoint *point, NEASize *size)
 NewRectD	/Users/briharrison/Dropbox/Code/nea-core/src/types.c	/^NEARect *NewRectD($/;"	function	line:149	signature:( NEADecimal x, NEADecimal y, NEADecimal width, NEADecimal height )
+SetSemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^SemVer * __asm __saveds SetSemVer($/;"	function	line:6	signature:( register __d0 NEAUWord major, register __d1 NEAUWord minor, register __d2 NEAUWord patch, register __a0 SemVer *semver )
+LIBSetSemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^SemVer * __asm __saveds LIBSetSemVer($/;"	function	line:28	signature:( register __d0 NEAUWord major, register __d1 NEAUWord minor, register __d2 NEAUWord patch, register __a0 SemVer *semver )
+CompareVersion	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^NEAByte __asm __saveds CompareVersion($/;"	function	line:39	signature:( register __a0 SemVer *left, register __a1 SemVer *right )
+LIBCompareVersion	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^NEAByte __asm __saveds LIBCompareVersion($/;"	function	line:52	signature:( register __a0 SemVer *left, register __a1 SemVer *right )
+SemVerToString	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^NEAString __asm __saveds SemVerToString($/;"	function	line:61	signature:( register __a0 SemVer *semver, register __a1 NEAString string )
+LIBSemVerToString	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.c	/^NEAString __asm __saveds LIBSemVerToString($/;"	function	line:93	signature:( register __a0 SemVer *semver, register __a1 NEAString string )
+NEA_UTIL_VERSION_H	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^#define NEA_UTIL_VERSION_H$/;"	macro	line:2
+SemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^typedef struct SemVer {$/;"	struct	line:7
+major	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord major;$/;"	member	line:8	struct:SemVer
+minor	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord minor;$/;"	member	line:9	struct:SemVer
+patch	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord patch;$/;"	member	line:10	struct:SemVer
+SemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^} SemVer;$/;"	typedef	line:11	typeref:struct:SemVer
+NEA_UTIL_VERSION_H	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^#define NEA_UTIL_VERSION_H$/;"	macro	line:2
+SemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^typedef struct SemVer {$/;"	struct	line:7
+major	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord major;$/;"	member	line:8	struct:SemVer
+minor	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord minor;$/;"	member	line:9	struct:SemVer
+patch	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^  NEAUWord patch;$/;"	member	line:10	struct:SemVer
+SemVer	/Users/briharrison/Dropbox/Code/nea-core/src/nea/util/version.h	/^} SemVer;$/;"	typedef	line:11	typeref:struct:SemVer
