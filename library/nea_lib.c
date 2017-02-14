@@ -3,6 +3,7 @@
 #include    <exec/types.h>
 #include    <clib/exec_protos.h>
 #include    <pragmas/exec_pragmas.h>
+#include    <clib/dos_protos.h>
 
 /* These prototypes are just to keep the compiler happy since we don't
 ** want them in the distributable proto file.
@@ -25,13 +26,10 @@ struct Library *SysBase = NULL;
 int __saveds
 __UserLibInit( void )
 {
-    int retval = 1;
-
     SysBase = (*((void **)4));
-
-    retval = 0;
+	Printf("UserLibInit\n");
         
-    return retval;
+    return 0;
 }
 
 
@@ -43,6 +41,7 @@ __UserLibInit( void )
 void __saveds
 __UserLibCleanup( void )
 {
+    Printf("UserLibCleanup\n");
 }
 
 

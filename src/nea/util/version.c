@@ -1,5 +1,6 @@
 #include <nea/util/version.h>
-#include <string.h>
+#include <nea/memory.h>
+#include <stdio.h>
 
 /* -------------------------------------------------------------------------*/
 
@@ -36,7 +37,7 @@ SemVer * __asm __saveds LIBSetSemVer(
 
 /* -------------------------------------------------------------------------*/
 
-NEAByte __asm __saveds CompareVersion(
+NEAWord __asm __saveds CompareVersion(
   register __a0 SemVer *left,
   register __a1 SemVer *right
 ) {
@@ -49,7 +50,7 @@ NEAByte __asm __saveds CompareVersion(
   if (left->patch == right->patch) return 0;
 }
 
-NEAByte __asm __saveds LIBCompareVersion(
+NEAWord __asm __saveds LIBCompareVersion(
   register __a0 SemVer *left,
   register __a1 SemVer *right
 ) {

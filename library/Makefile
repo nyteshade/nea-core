@@ -25,9 +25,9 @@ C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
 
 LINKER=             SC:C/SLINK
 
-C_SOURCES=          nea_lib.c nea.c $(IDIR)/nea/util/lmap.c $(IDIR)/nea/types.c $(IDIR)/nea/file/strings.c
+C_SOURCES=          nea_lib.c $(IDIR)/nea/util/lmap.c $(IDIR)/nea/types.c $(IDIR)/nea/file/strings.c $(IDIR)/nea/util/version.c
 
-OBJECTS=            nea_lib.o nea.o $(IDIR)/nea/types.o $(IDIR)/nea/util/lmap.o $(IDIR)/nea/file/strings.o
+OBJECTS=            nea_lib.o $(IDIR)/nea/types.o $(IDIR)/nea/util/lmap.o $(IDIR)/nea/file/strings.o $(IDIR)/nea/util/version.o
 LIBS=               LIB:sc.lib LIB:amiga.lib LIB:scm.lib
 
 LIBENT=             LIB:libent.o

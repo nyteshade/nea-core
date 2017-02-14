@@ -1,12 +1,13 @@
 ##base _NEABase
 ##bias 30
 ##public
-sayHi(length,string)(D0,A0)
-NewPointI(x,y,z)(D0,D1,D2)
 SetFString(string,fstring)(A0,A1)
 DupFString(fstring,dupStringToo)(A0,D0)
 FreeFString(fstring)(A0)
 WriteFString(filePtr,fstring)(D0,A0)
 ReadFString(filePtr,fstring)(D0,A0)
+SetSemVer(major,minor,patch,semver)(D0,D1,D2,A0)
+CompareVersion(left,right)(A0,A1)
+SemVerToString(semver,string)(A0,A1)
 ##private
 ##end

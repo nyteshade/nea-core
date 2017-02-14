@@ -46,7 +46,7 @@ SemVer * __asm __saveds SetSemVer(
  * @return -1 if the left is greater, 0 if they are equal and 1 if the right
  * SemVer structure is greater in number.
  */
-NEAByte __asm __saveds CompareVersion(
+NEAWord __asm __saveds CompareVersion(
   register __a0 SemVer *left,
   register __a1 SemVer *right
 );

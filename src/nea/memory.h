@@ -1,6 +1,7 @@
 #ifndef NEA_MEMORY_H
 #define NEA_MEMORY_H
 
+#include <proto/exec.h>
 #include <exec/memory.h>
 
 /** 
