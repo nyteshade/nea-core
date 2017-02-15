@@ -1,28 +1,57 @@
 #include <nea/util/lmap.h>
 #include <exec/memory.h>
 
-NEABoolean LMapNodeHasNext(LMapNode *node) {
+NEABoolean __asm __saveds LMapNodeHasNext(register __a0 LMapNode *node) {
   return (NEABoolean)(node->node.ln_Succ != NULL);
 }
 
-LMapNode *LMapNodeNextNode(LMapNode *node) {
+NEABoolean __asm __saveds LIBLMapNodeHasNext(register __a0 LMapNode *node) {
+  return LMapNodeHasNext(node);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapNodeNextNode(register __a0 LMapNode *node) {
   return (LMapNode*)node->node.ln_Succ;
 }
 
-LMapNode *LMapNodePrevNode(LMapNode *node) {
+LMapNode * __asm __saveds LIBLMapNodeNextNode(register __a0 LMapNode *node) {
+  return LMapNodeNextNode(node);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapNodePrevNode(register __a0 LMapNode *node) {
   return (LMapNode*)node->node.ln_Pred;
 }
 
-LMapDataType LMapNodeType(LMapNode *node) {
+LMapNode * __asm __saveds LIBLMapNodePrevNode(register __a0 LMapNode *node) {
+  return LMapNodePrevNode(node);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapDataType __asm __saveds LMapNodeType(register __a0 LMapNode *node) {
   return node->data.type;
 }
 
-LMapNode *LMapHeadNode(LMap *map) {
+LMapDataType __asm __saveds LIBLMapNodeType(register __a0 LMapNode *node) {
+  return LMapNodeType(node);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapHeadNode(register __a0 LMap *map) {
   return (LMapNode *)map->list.lh_Head;
 }
 
-/** Initializers */
-LMap *NewLMap(ULONG memReqs) {
+LMapNode * __asm __saveds LIBLMapHeadNode(register __a0 LMap *map) {
+  return LMapHeadNode(map);
+}
+
+/* -- Initializers ----------------------------------------------------------*/
+
+LMap * __asm __saveds NewLMap(register __d0 ULONG memReqs) {
   LMap *map;
 
   map = (LMap *)AllocVec(sizeof(LMap), memReqs);
@@ -66,7 +95,18 @@ LMap *NewLMap(ULONG memReqs) {
   return map;
 }
 
-LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, NEAString key, NEAPointer data) {
+LMap * __asm __saveds LIBNewLMap(register __d0 ULONG memReqs) {
+  return NewLMap(memReqs);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds NewLMapNode(
+  register __d0 ULONG memReqs,
+  register __d1 LMapDataType type,
+  register __a0 NEAString key,
+  register __a1 NEAPointer data
+) {
   LMapNode *node;
 
   node = (LMapNode *)AllocVec(sizeof(LMapNode), memReqs | MEMF_CLEAR);
@@ -102,7 +142,21 @@ LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, NEAString key, NEAPointe
   return node;
 }
 
-LMapNode *CopyLMapNode(ULONG memReqs, LMapNode *source) {
+LMapNode * __asm __saveds LIBNewLMapNode(
+  register __d0 ULONG memReqs,
+  register __d1 LMapDataType type,
+  register __a0 NEAString key,
+  register __a1 NEAPointer data
+) {
+  return NewLMapNode(memReqs, type, key, data);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds CopyLMapNode(
+  register __d0 ULONG memReqs,
+  register __a0 LMapNode *source
+) {
   LMapNode *dest;
 
   dest = (LMapNode *)AllocVec(sizeof(LMapNode), memReqs | MEMF_CLEAR);
@@ -111,8 +165,17 @@ LMapNode *CopyLMapNode(ULONG memReqs, LMapNode *source) {
   return dest;
 }
 
+LMapNode * __asm __saveds LIBCopyLMapNode(
+  register __d0 ULONG memReqs,
+  register __a0 LMapNode *source
+) {
+  return CopyLMapNode(memReqs, source);
+}
+
+/* --------------------------------------------------------------------------*/
+
 /** Destructors */
-void FreeLMap(LMap *map) {
+void  __asm __saveds FreeLMap(register __a0 LMap *map) {
   LMapNode *rootNode;
   LMapNode *nextNode;
 
@@ -127,7 +190,17 @@ void FreeLMap(LMap *map) {
   }
 }
 
-LMapNode *FindNamedType(LMap *map, NEAString key, LMapDataType type) {
+void  __asm __saveds LIBFreeLMap(register __a0 LMap *map) {
+  FreeLMap(map);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds FindNamedType(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+) {
   struct LMapNode *node;
 
   node = (LMapNode *)FindName((struct List *)map, key);
@@ -144,72 +217,267 @@ LMapNode *FindNamedType(LMap *map, NEAString key, LMapDataType type) {
   return NULL;
 }
 
+LMapNode * __asm __saveds LIBFindNamedType(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+) {
+  return FindNamedType(map, key, type);
+}
+
+/* --------------------------------------------------------------------------*/
+
 /** Getters */
-NEAPointer GetLMapPointer(LMap *map, NEAString key) {
+NEAPointer __asm __saveds GetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapPointerDefault(map, key, NULL);
 }
 
-NEAString GetLMapString(LMap *map, NEAString key) {
+NEAPointer __asm __saveds LIBGetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapPointer(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds GetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapStringDefault(map, key, NULL);
 }
 
-NEADecimal GetLMapDecimal(LMap *map, NEAString key) {
+NEAString __asm __saveds LIBGetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapString(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEADecimal __asm __saveds GetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapDecimalDefault(map, key, -1.);
 }
 
-NEAInteger GetLMapInteger(LMap *map, NEAString key) {
+NEADecimal __asm __saveds LIBGetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapDecimal(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAInteger __asm __saveds GetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapIntegerDefault(map, key, -1);
 }
 
-NEABoolean GetLMapBoolean(LMap *map, NEAString key) {
+NEAInteger __asm __saveds LIBGetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapInteger(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean __asm __saveds GetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapBooleanDefault(map, key, FALSE);
 }
 
-LMap *GetLMapMap(LMap *map, NEAString key) {
+NEABoolean __asm __saveds LIBGetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapBoolean(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds GetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapMapDefault(map, key, NULL);
 }
 
-List *GetLMapList(LMap *map, NEAString key) {
+LMap * __asm __saveds LIBGetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapMap(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   return GetLMapListDefault(map, key, NULL);
 }
 
-NEAPointer GetLMapPointerDefault(LMap *map, NEAString key, NEAPointer def) {
+List * __asm __saveds LIBGetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetLMapList(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAPointer __asm __saveds GetLMapPointerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer def
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_POINTER);
   return node ? node : def;
 }
 
-NEAString GetLMapStringDefault(LMap *map, NEAString key, NEAString def) {
+NEAPointer __asm __saveds LIBGetLMapPointerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer def
+) {
+  return GetLMapPointerDefault(map, key, def);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAString  __asm __saveds GetLMapStringDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString def
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_STRING);
   return node ? node->data.u.string : def;
 }
 
-NEADecimal GetLMapDecimalDefault(LMap *map, NEAString key, NEADecimal def) {
+NEAString  __asm __saveds LIBGetLMapStringDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString def
+) {
+  return GetLMapStringDefault(map, key, def);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEADecimal  __asm __saveds GetLMapDecimalDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal def
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_DECIMAL);
   return node ? node->data.u.decimal : def;
 }
 
-NEAInteger GetLMapIntegerDefault(LMap *map, NEAString key, NEAInteger def) {
+NEADecimal  __asm __saveds LIBGetLMapDecimalDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal def
+) {
+  return GetLMapDecimalDefault(map, key, def);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAInteger  __asm __saveds GetLMapIntegerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger def
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_INTEGER);
   return node ? node->data.u.integer : def;
 }
 
-NEABoolean GetLMapBooleanDefault(LMap *map, NEAString key, NEABoolean def) {
+NEAInteger  __asm __saveds LIBGetLMapIntegerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger def
+) {
+  return GetLMapIntegerDefault(map, key, def);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean  __asm __saveds GetLMapBooleanDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean def
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_BOOLEAN);
   return (NEABoolean)(node ? node->data.u.boolean : def);
 }
 
-LMap *GetLMapMapDefault(LMap *map, NEAString key, LMap *def) {
+NEABoolean  __asm __saveds LIBGetLMapBooleanDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean def
+) {
+  return GetLMapBooleanDefault(map, key, def);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds GetLMapMapDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_LMAP);
-  return node ? node->data.u.map : def;
+  return node ? node->data.u.map : lmap;
 }
 
-List *GetLMapListDefault(LMap *map, NEAString key, List *def) {
+LMap * __asm __saveds LIBGetLMapMapDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+) {
+  return GetLMapMapDefault(map, key, lmap);
+}
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetLMapListDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_LIST);
-  return node ? node->data.u.list : def;
+  return node ? node->data.u.list : list;
 }
 
-/** Setters */
-void SetLMapPointer(LMap *map, NEAString key, NEAPointer pointer) {
+List * __asm __saveds LIBGetLMapListDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+) {
+  return GetLMapListDefault(map, key, list);
+}
+
+/* -- Setters ---------------------------------------------------------------*/
+
+void __asm __saveds SetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer pointer
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_POINTER);
   if (node) {
     node->data.u.pointer = pointer;
@@ -220,7 +488,21 @@ void SetLMapPointer(LMap *map, NEAString key, NEAPointer pointer) {
   }
 }
 
-void SetLMapString(LMap *map, NEAString key, NEAString string) {
+void __asm __saveds LIBSetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer pointer
+) {
+  SetLMapPointer(map, key, pointer);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString string
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_STRING);
   if (node) {
     node->data.u.string = string;
@@ -231,40 +513,100 @@ void SetLMapString(LMap *map, NEAString key, NEAString string) {
   }
 }
 
-void SetLMapDecimal(LMap *map, NEAString key, NEADecimal decimal) {
+void __asm __saveds LIBSetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString string
+) {
+  SetLMapString(map, key, string);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal decimal
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_DECIMAL);
+  NEADecimal ptr = decimal;
+
   if (node) {
     node->data.u.decimal = decimal;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_DECIMAL, key, (NEADecimal *)&decimal);
+    node = NewLMapNode(MEMF_ANY, LMAP_DECIMAL, key, (NEADecimal*)&ptr);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapInteger(LMap *map, NEAString key, NEAInteger integer) {
+void __asm __saveds LIBSetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal decimal
+) {
+  SetLMapDecimal(map, key, decimal);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger integer
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_INTEGER);
+  NEAInteger ptr = integer;
   if (node) {
     node->data.u.integer = integer;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_INTEGER, key, (NEAPointer)&integer);
+    node = NewLMapNode(MEMF_ANY, LMAP_INTEGER, key, (NEAPointer)&ptr);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapBoolean(LMap *map, NEAString key, NEABoolean boolean) {
+void __asm __saveds LIBSetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger integer
+) {
+  SetLMapInteger(map, key, integer);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean boolean
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_BOOLEAN);
+  NEABoolean ptr = boolean;
   if (node) {
     node->data.u.boolean = boolean;
   }
   else {
-    node = NewLMapNode(MEMF_ANY, LMAP_POINTER, key, (NEAPointer)&boolean);
+    node = NewLMapNode(MEMF_ANY, LMAP_POINTER, key, (NEABoolean *)&ptr);
     AddTail((struct List *)map, (struct Node *)node);
   }
 }
 
-void SetLMapMap(LMap *map, NEAString key, LMap *lmap) {
+void __asm __saveds LIBSetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean boolean
+) {
+  SetLMapBoolean(map, key, boolean);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_LMAP);
   if (node) {
     node->data.u.map = lmap;
@@ -275,7 +617,21 @@ void SetLMapMap(LMap *map, NEAString key, LMap *lmap) {
   }
 }
 
-void SetLMapList(LMap *map, NEAString key, List *list) {
+void __asm __saveds LIBSetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+) {
+  SetLMapMap(map, key, lmap);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+) {
   LMapNode *node = FindNamedType(map, key, LMAP_LIST);
   if (node) {
     node->data.u.list = list;
@@ -286,8 +642,18 @@ void SetLMapList(LMap *map, NEAString key, List *list) {
   }
 }
 
+void __asm __saveds LIBSetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+) {
+  SetLMapList(map, key, list);
+}
+
+/* --------------------------------------------------------------------------*/
+
 /** Utility methods */
-size_t CountLMapNodes(LMap *map) {
+size_t __asm __saveds CountLMapNodes(register __a0 LMap *map) {
   size_t size;
   struct List *list;
   struct Node *node;
@@ -302,7 +668,16 @@ size_t CountLMapNodes(LMap *map) {
   return size;
 }
 
-void ForEachLMapNode(LMap *map, LMapIterFn fn) {
+size_t __asm __saveds LIBCountLMapNodes(register __a0 LMap *map) {
+  return CountLMapNodes(map);
+}
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds ForEachLMapNode(
+  register __a0 LMap *map,
+  register __a1 LMapIterFn fn
+) {
   LMapNode *node;
 
   for (
@@ -314,7 +689,19 @@ void ForEachLMapNode(LMap *map, LMapIterFn fn) {
   }
 }
 
-LMap *FilterLMap(LMap *map, LMapFilterFn fn) {
+void __asm __saveds LIBForEachLMapNode(
+  register __a0 LMap *map,
+  register __a1 LMapIterFn fn
+) {
+  ForEachLMapNode(map, fn);
+}
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds FilterLMap(
+  register __a0 LMap *map,
+  register __a1 LMapFilterFn fn
+) {
   LMap *newMap;
   LMapNode *newNode;
   LMapNode *node;
@@ -337,7 +724,20 @@ LMap *FilterLMap(LMap *map, LMapFilterFn fn) {
   return newMap;
 }
 
-NEABoolean HasLMapTypeForKey(LMap *map, NEAString key, LMapDataType type) {
+LMap * __asm __saveds LIBFilterLMap(
+  register __a0 LMap *map,
+  register __a1 LMapFilterFn fn
+) {
+  return FilterLMap(map, fn);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean __asm __saveds HasLMapTypeForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+) {
   struct LMapNode *node;
 
   node = (LMapNode *)FindName((struct List *)map, key);
@@ -352,10 +752,22 @@ NEABoolean HasLMapTypeForKey(LMap *map, NEAString key, LMapDataType type) {
   }
 
   return FALSE;
-
 }
 
-List *GetAllLMapValuesForKey(LMap *map, NEAString key) {
+NEABoolean __asm __saveds LIBHasLMapTypeForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+) {
+  return HasLMapTypeForKey(map, key, type);
+}
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetAllLMapValuesForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
   struct List *list;
   LMapNode *newNode;
   LMapNode *node;
@@ -374,4 +786,62 @@ List *GetAllLMapValuesForKey(LMap *map, NEAString key) {
   }
 
   return list;
+}
+
+List * __asm __saveds LIBGetAllLMapValuesForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+) {
+  return GetAllLMapValuesForKey(map, key);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds LMapToString(
+  register __a0 NEAString buffer,
+  register __a1 LMap *map,
+  register __d0 NEABoolean verbose
+) {
+  /*
+  LMapNode *node;
+  NEAString buffer;
+  NEAString nodeString;
+  NEAInteger bytes = 0;
+  NEAInteger bufferSize = 0;
+  NEAChar temp[1024];
+
+  while(node = map->head(map); node; node = node->next(node)) {
+    nodeString = LMapNodeToString(&temp, node, verbose);
+    bytes += strlen(nodeString);
+    strcat(buffer,)
+  }
+  */
+
+  return NULL;
+}
+
+NEAString __asm __saveds LIBLMapToString(
+  register __a0 NEAString buffer,
+  register __a1 LMap *map,
+  register __d0 NEABoolean verbose
+) {
+  return LMapToString(buffer, map, verbose);
+}
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds LMapNodeToString(
+  register __a0 NEAString buffer,
+  register __a1 LMapNode *node,
+  register __d0 NEABoolean verbose
+) {
+  return NULL;
+}
+
+NEAString __asm __saveds LIBLMapNodeToString(
+  register __a0 NEAString buffer,
+  register __a1 LMapNode *node,
+  register __d0 NEABoolean verbose
+) {
+  return LMapNodeToString(buffer, node, verbose);
 }

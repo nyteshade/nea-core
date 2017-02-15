@@ -10,7 +10,7 @@
 
 MODNAME=     nea
 VERSION=     37
-REVISION=    5
+REVISION=    6
 
 IDIR=        /src
 LIBFILE=     $(MODNAME).library
@@ -78,8 +78,3 @@ reload:
 
 pragmas:
     $(FD_CONV) $(FD_FILE) $(PRAGMA_FILE)
-
-
-
-
-

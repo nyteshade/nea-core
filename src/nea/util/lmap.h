@@ -9,6 +9,8 @@
 
 #include <nea/types.h>
 
+/* --------------------------------------------------------------------------*/
+
 typedef enum LMapDataType {
     LMAP_NONE = 0,
     LMAP_POINTER,
@@ -20,59 +22,169 @@ typedef enum LMapDataType {
     LMAP_LIST
 } LMapDataType;
 
-/** Letting the compiler know these will be defined below. */
+/* -- Letting the compiler know these will be defined below -----------------*/
+
 typedef struct List List;
 typedef struct LMap LMap;
 typedef struct LMapData LMapData;
 typedef struct LMapNode LMapNode;
 typedef struct LMapDataNode LMapDataNode;
 
+/* -- Function Pointers -----------------------------------------------------*/
+
 /** A function typedef for use with iterator methods */
-typedef void (*LMapIterFn)(LMapNode *node, NEAString key, LMapData *value);
+typedef void (* __asm LMapIterFn)(
+  register __a0 LMapNode *node,
+  register __a1 NEAString key,
+  register __a2 LMapData *value
+);
 
 /** A function typedef for use with filtering methods */
-typedef NEABoolean (*LMapFilterFn)(LMapData *value, NEAString key, LMap *map);
+typedef NEABoolean (* __asm LMapFilterFn)(
+  register __a0 LMapData *value,
+  register __a1 NEAString key,
+  register __a2 LMap *map
+);
+
+/* -- Structures ------------------------------------------------------------*/
 
 /** Define the LMap as an alias for the struct List type */
 struct LMap {
   List list;
   ULONG memRequirements;
 
-  LMapNode *(*head)(LMap *map);
+  LMapNode *(* __asm head)(register __a0 LMap *map);
 
-  NEAPointer (*getPointer)(LMap *map, NEAString key);
-  NEAString (*getString)(LMap *map, NEAString key);
-  NEADecimal (*getDecimal)(LMap *map, NEAString key);
-  NEAInteger (*getInteger)(LMap *map, NEAString key);
-  NEABoolean (*getBoolean)(LMap *map, NEAString key);
-  LMap *(*getMap)(LMap *map, NEAString key);
-  List *(*getList)(LMap *map, NEAString key);
+  NEAPointer (* __asm getPointer)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  NEAString (* __asm getString)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  NEADecimal (* __asm getDecimal)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  NEAInteger (* __asm getInteger)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  NEABoolean (* __asm getBoolean)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  LMap *(* __asm getMap)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
+  List *(* __asm getList)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
 
-  LMapNode *(*getNamedType)(LMap *map, NEAString key, LMapDataType type);
-  List *(*getAllValuesForKey)(LMap *map, NEAString key);
+  LMapNode *(* __asm getNamedType)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 LMapDataType type
+  );
+  List *(* __asm getAllValuesForKey)(
+    register __a0 LMap *map,
+    register __a1 NEAString key
+  );
 
-  NEAPointer (*getPointerDefault)(LMap *map, NEAString key, NEAPointer pointer);
-  NEAString (*getStringDefault)(LMap *map, NEAString key, NEAString string);
-  NEADecimal (*getDecimalDefault)(LMap *map, NEAString key, NEADecimal decimal);
-  NEAInteger (*getIntegerDefault)(LMap *map, NEAString key, NEAInteger integer);
-  NEABoolean (*getBooleanDefault)(LMap *map, NEAString key, NEABoolean boolean);
-  LMap *(*getMapDefault)(LMap *map, NEAString key, LMap *defaultMap);
-  List *(*getListDefault)(LMap *map, NEAString key, List *list);
+  NEAPointer (* __asm getPointerDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 NEAPointer pointer
+  );
+  NEAString (* __asm getStringDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 NEAString string
+  );
+  NEADecimal (* __asm getDecimalDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEADecimal decimal
+  );
+  NEAInteger (* __asm getIntegerDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEAInteger integer
+  );
+  NEABoolean (* __asm getBooleanDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEABoolean boolean
+  );
+  LMap *(* __asm getMapDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 LMap *defaultMap
+  );
+  List *(* __asm getListDefault)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 List *list
+  );
 
-  void (*setPointer)(LMap *map, NEAString key, NEAPointer pointer);
-  void (*setString)(LMap *map, NEAString key, NEAString string);
-  void (*setDecimal)(LMap *map, NEAString key, NEADecimal decimal);
-  void (*setInteger)(LMap *map, NEAString key, NEAInteger integer);
-  void (*setBoolean)(LMap *map, NEAString key, NEABoolean boolean);
-  void (*setMap)(LMap *map, NEAString key, LMap *lmap);
-  void (*setList)(LMap *map, NEAString key, List *list);
+  void (* __asm setPointer)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 NEAPointer pointer
+  );
+  void (* __asm setString)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 NEAString string
+  );
+  void (* __asm setDecimal)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEADecimal decimal
+  );
+  void (* __asm setInteger)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEAInteger integer
+  );
+  void (* __asm setBoolean)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 NEABoolean boolean
+  );
+  void (* __asm setMap)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 LMap *lmap
+  );
+  void (* __asm setList)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __a2 List *list
+  );
 
-  void (*forEach)(LMap *map, LMapIterFn fn);
-  LMap *(*filter)(LMap *map, LMapFilterFn filterFn);
+  void (* __asm forEach)(
+    register __a0 LMap *map,
+    register __a1 LMapIterFn fn
+  );
+  LMap *(* __asm filter)(
+    register __a0 LMap *map,
+    register __a1 LMapFilterFn filterFn
+  );
 
-  size_t (*size)(LMap *map);
-  NEABoolean (*hasTypeForKey)(LMap *map, NEAString key, LMapDataType type);
+  size_t (* __asm size)(register __a0 LMap *map);
+
+  NEABoolean (* __asm hasTypeForKey)(
+    register __a0 LMap *map,
+    register __a1 NEAString key,
+    register __d0 LMapDataType type
+  );
 };
+
+/* --------------------------------------------------------------------------*/
 
 /** The data portion of the LMap */
 struct LMapData {
@@ -93,6 +205,8 @@ struct LMapData {
   LMapDataType type;
 };
 
+/* --------------------------------------------------------------------------*/
+
 /**
  * Since the LMap is based on the exec List structures,
  * it needs a compatible struct Node data storage in
@@ -102,53 +216,274 @@ struct LMapNode {
   struct Node node;
   LMapData data;
 
-  NEABoolean (*hasNext)(LMapNode *node);
-  LMapNode *(*prev)(LMapNode *node);
-  LMapNode *(*next)(LMapNode *node);
-  LMapDataType (*type)(LMapNode *node);
+  NEABoolean (* __asm hasNext)(register __a0 LMapNode *node);
+  LMapNode *(* __asm prev)(register __a0 LMapNode *node);
+  LMapNode *(* __asm next)(register __a0 LMapNode *node);
+  LMapDataType (* __asm type)(register __a0 LMapNode *node);
 };
 
-/** Initializers */
-LMap *NewLMap(ULONG memReqs);
-LMapNode *NewLMapNode(ULONG memReqs, LMapDataType type, NEAString key, NEAPointer data);
-LMapNode *CopyLMapNode(ULONG memReqs, LMapNode *source);
+/* -- Initializers ----------------------------------------------------------*/
 
-/** Destructors */
-void FreeLMap(LMap *map);
+LMap * __asm __saveds NewLMap(register __d0 ULONG memReqs);
 
-/** Getters */
-NEAPointer   GetLMapPointer(LMap *map, NEAString key);
-NEAString    GetLMapString(LMap *map, NEAString key);
-NEADecimal   GetLMapDecimal(LMap *map, NEAString key);
-NEAInteger   GetLMapInteger(LMap *map, NEAString key);
-NEABoolean   GetLMapBoolean(LMap *map, NEAString key);
-LMap       *GetLMapMap(LMap *map, NEAString key);
-List       *GetLMapList(LMap *map, NEAString key);
+/* --------------------------------------------------------------------------*/
 
-NEAPointer   GetLMapPointerDefault(LMap *map, NEAString key, NEAPointer def);
-NEAString    GetLMapStringDefault(LMap *map, NEAString key, NEAString def);
-NEADecimal   GetLMapDecimalDefault(LMap *map, NEAString key, NEADecimal def);
-NEAInteger   GetLMapIntegerDefault(LMap *map, NEAString key, NEAInteger def);
-NEABoolean   GetLMapBooleanDefault(LMap *map, NEAString key, NEABoolean def);
-LMap       *GetLMapMapDefault(LMap *map, NEAString key, LMap *lmap);
-List       *GetLMapListDefault(LMap *map, NEAString key, List *list);
+LMapNode * __asm __saveds NewLMapNode(
+  register __d0 ULONG memReqs,
+  register __d1 LMapDataType type,
+  register __a0 NEAString key,
+  register __a1 NEAPointer data
+);
 
-/** Setters */
-void SetLMapPointer(LMap *map, NEAString key, NEAPointer pointer);
-void SetLMapString(LMap *map, NEAString key, NEAString string);
-void SetLMapDecimal(LMap *map, NEAString key, NEADecimal decimal);
-void SetLMapInteger(LMap *map, NEAString key, NEAInteger integer);
-void SetLMapBoolean(LMap *map, NEAString key, NEABoolean boolean);
-void SetLMapMap(LMap *map, NEAString key, LMap *lmap);
-void SetLMapList(LMap *map, NEAString key, List *list);
+/* --------------------------------------------------------------------------*/
 
-/** Utility methods */
-size_t CountLMapNodes(LMap *map);
-void ForEachLMapNode(LMap *map, LMapIterFn fn);
-LMap *FilterLMap(LMap *map, LMapFilterFn fn);
-LMapNode *FindNamedType(LMap *map, NEAString key, LMapDataType type);
+LMapNode * __asm __saveds CopyLMapNode(
+  register __d0 ULONG memReqs,
+  register __a0 LMapNode *source
+);
 
-NEABoolean HasLMapTypeForKey(LMap *map, NEAString key, LMapDataType type);
-List *GetAllLMapValuesForKey(LMap *map, NEAString key);
+/* -- Destructors -----------------------------------------------------------*/
+
+void  __asm __saveds FreeLMap(register __a0 LMap *map);
+
+/* -- Getters ---------------------------------------------------------------*/
+
+NEAPointer __asm __saveds GetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds GetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEADecimal __asm __saveds GetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAInteger __asm __saveds GetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean __asm __saveds GetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds GetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAPointer __asm __saveds GetLMapPointerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer def
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAString  __asm __saveds GetLMapStringDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString def
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEADecimal  __asm __saveds GetLMapDecimalDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal def
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAInteger  __asm __saveds GetLMapIntegerDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger def
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean  __asm __saveds GetLMapBooleanDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean def
+);
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds GetLMapMapDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+);
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetLMapListDefault(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+);
+
+/* -- Setters ---------------------------------------------------------------*/
+
+void __asm __saveds SetLMapPointer(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAPointer pointer
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapString(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 NEAString string
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapDecimal(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEADecimal decimal
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapInteger(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEAInteger integer
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapBoolean(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 NEABoolean boolean
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapMap(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 LMap *lmap
+);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds SetLMapList(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __a2 List *list
+);
+
+/* -- Utility methods -------------------------------------------------------*/
+
+size_t __asm __saveds CountLMapNodes(register __a0 LMap *map);
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean __asm __saveds LMapNodeHasNext(register __a0 LMapNode *node);
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapNodeNextNode(register __a0 LMapNode *node);
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapNodePrevNode(register __a0 LMapNode *node);
+
+/* --------------------------------------------------------------------------*/
+
+LMapDataType __asm __saveds LMapNodeType(register __a0 LMapNode *node);
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds LMapHeadNode(register __a0 LMap *map);
+
+/* --------------------------------------------------------------------------*/
+
+void __asm __saveds ForEachLMapNode(
+  register __a0 LMap *map,
+  register __a1 LMapIterFn fn
+);
+
+/* --------------------------------------------------------------------------*/
+
+LMap * __asm __saveds FilterLMap(
+  register __a0 LMap *map,
+  register __a1 LMapFilterFn fn
+);
+
+/* --------------------------------------------------------------------------*/
+
+LMapNode * __asm __saveds FindNamedType(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEABoolean __asm __saveds HasLMapTypeForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key,
+  register __d0 LMapDataType type
+);
+
+/* --------------------------------------------------------------------------*/
+
+List * __asm __saveds GetAllLMapValuesForKey(
+  register __a0 LMap *map,
+  register __a1 NEAString key
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds LMapToString(
+  register __a0 NEAString buffer,
+  register __a1 LMap *map,
+  register __d0 NEABoolean verbose
+);
+
+/* --------------------------------------------------------------------------*/
+
+NEAString __asm __saveds LMapNodeToString(
+  register __a0 NEAString buffer,
+  register __a1 LMapNode *node,
+  register __d0 NEABoolean verbose
+);
+
+/* --------------------------------------------------------------------------*/
 
 #endif
