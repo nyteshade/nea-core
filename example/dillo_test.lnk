@@ -1,4 +1,0 @@
-FROM LIB:c.o "dillo_test.o"
-TO "dillo_test"
-LIB LIB:sc.lib LIB:amiga.lib
-

@@ -4,6 +4,7 @@
 #include <exec/memory.h>
 
 typedef char           * NEAString;
+typedef char             NEAChar;
 typedef void           * NEAPointer;
 typedef unsigned char    NEABoolean;
 typedef unsigned char    NEAByte;

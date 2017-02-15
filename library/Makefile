@@ -8,31 +8,31 @@
 ##  new application I decided to write. Should be backwards compatible and
 ##  should allow much faster development on the Amiga.
 
-MODNAME=            nea
-VERSION=            37
-REVISION=           0
+MODNAME=     nea
+VERSION=     37
+REVISION=    5
 
-IDIR=               /src
-LIBFILE=            $(MODNAME).library
+IDIR=        /src
+LIBFILE=     $(MODNAME).library
 
-FD_CONV=            SC:C/FD2PRAGMA
-FD_FILE=            $(MODNAME)_lib.fd
-PRAGMA_FILE=        /src/nea/pragmas/$(MODNAME)_pragmas.h
-PROTO_FILE=         /src/nea/proto/$(MODNAME).h
+FD_CONV=     SC:C/FD2PRAGMA
+FD_FILE=     $(MODNAME)_lib.fd
+PRAGMA_FILE= /src/nea/pragmas/$(MODNAME)_pragmas.h
+PROTO_FILE=  /src/nea/proto/$(MODNAME).h
 
-C_COMPILER=         SC:C/SC
-C_OPTS=             STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
+C_COMPILER=  SC:C/SC
+C_OPTS=      STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
 
-LINKER=             SC:C/SLINK
+LINKER=      SC:C/SLINK
 
-C_SOURCES=          nea_lib.c $(IDIR)/nea/util/lmap.c $(IDIR)/nea/types.c $(IDIR)/nea/file/strings.c $(IDIR)/nea/util/version.c
+C_SOURCES=   nea_lib.c $(IDIR)/nea/util/lmap.c $(IDIR)/nea/types.c $(IDIR)/nea/file/strings.c $(IDIR)/nea/util/version.c
 
-OBJECTS=            nea_lib.o $(IDIR)/nea/types.o $(IDIR)/nea/util/lmap.o $(IDIR)/nea/file/strings.o $(IDIR)/nea/util/version.o
-LIBS=               LIB:sc.lib LIB:amiga.lib LIB:scm.lib
+OBJECTS=     nea_lib.o $(IDIR)/nea/types.o $(IDIR)/nea/util/lmap.o $(IDIR)/nea/file/strings.o $(IDIR)/nea/util/version.o
+LIBS=        LIB:sc.lib LIB:amiga.lib LIB:scm.lib
 
-LIBENT=             LIB:libent.o
-LIBINIT=            LIB:libinitr.o
-LIBPREFIX=          _LIB
+LIBENT=      LIB:libent.o
+LIBINIT=     LIB:libinitr.o
+LIBPREFIX=   _LIB
 
 ##############################################################################
 # Build the library...
@@ -73,14 +73,11 @@ clean:
 #
 reload:
     @copy $(LIBFILE) LIBS:
-    @copy $(PROTO_FILE) INCLUDE:proto/
-    @copy $(PRAGMA_FILE) INCLUDE:pragmas/
-    #@copy $(FD_FILE) FD:
     @flushlibs
     @version $(LIBFILE)
 
-
-
+pragmas:
+    $(FD_CONV) $(FD_FILE) $(PRAGMA_FILE)
 
 
 

@@ -108,4 +108,25 @@ NEAFString * __asm __saveds ReadFString(
   register __a0 NEAFString *fstring
 );
 
+/**
+ * Primarily for debugging purposes, the FStringToString can be used for
+ * tools that wish to display detailed information about data structures 
+ * used for writing strings to disk.
+ *
+ * @method FStringToString
+ *
+ * @param fstring an instance of an NEAFString structure
+ * @param string the NEAString or char * buffer in which to copy the results
+ * @param note an optional, nullable, note that can be used to provide more
+ * detail for a given NEAFString string
+ *
+ * @return the pointer that is either allocated, in the case of a null string,
+ * or the that of the supplied string value for inlining.
+ */
+NEAString __asm __saveds FStringToString(
+  register __a0 NEAFString *fstring,
+  register __a1 NEAString string,
+  register __a2 NEAString note
+);
+
 #endif
