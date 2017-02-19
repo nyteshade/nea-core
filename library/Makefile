@@ -35,7 +35,7 @@ UTIL_OBJS=   $(IDIR)/nea/util/lmap.o $(IDIR)/nea/util/version.o
 CORE_OBJS=   $(IDIR)/nea/core/strings.o $(IDIR)/nea/core/arrays.o
 FILE_OBJS=   $(IDIR)/nea/file/strings.o
 ROOT_OBJS=   $(IDIR)/nea/types.o
-OBJECTS=     nea_lib.c $(ROOT_OBJS) $(CORE_OBJS) $(FILE_OBJS) $(UTIL_OBJS)
+OBJECTS=     nea_lib.o $(ROOT_OBJS) $(CORE_OBJS) $(FILE_OBJS) $(UTIL_OBJS)
 
 LIBS=        LIB:sc.lib LIB:amiga.lib LIB:scm.lib
 

@@ -1,7 +1,19 @@
 #include <nea/core/arrays.h>
+#include <nea/memory.h>
 
-static NEAString *__strdup(NEAString *source) {
-  NEAUInteger size = strlen(source);
+#include <exec/memory.h>
+#include <proto/exec.h>
+#include <string.h>
+
+static NEAUInteger __strlen(NEAString source) {
+  NEAUInteger size = 0;
+  NEAString p = source;
+  while(*p) {size++; p = p + 1;}
+  return size;
+}
+
+static NEAString __strdup(NEAString source) {
+  NEAUInteger size = __strlen(source);
   NEAString buffer = (NEAString)AllocVec(sizeof(char) * size, NEA_MEMF_FLAGS);
   return buffer;
 }
@@ -76,7 +88,7 @@ Array * __saveds __asm SetArray(
 ) {
   memset(array, 0L, size);
   array->items = items;
-  array->size = size;
+  array->count = size;
 
   return array;
 }
@@ -100,7 +112,7 @@ StringArray * __saveds __asm NewStringArray(
   );
 
   if (copyThese) {
-    for (i = 0; i < size; i++) array->items[i] = __strdup(copyThese[i]);
+    for (i = 0; i < size; i++) array->strings[i] = __strdup(copyThese[i]);
     array->freeFn = __defaultFreeFn;
   }
 
@@ -182,7 +194,7 @@ void __saveds __asm FreeArray(register __a0 Array *array) {
   NEAUInteger i;
 
   if (array->freeFn) {
-    for (i = 0; i < array->count; i++) array->FreeFn(array->items[i]);
+    for (i = 0; i < array->count; i++) array->freeFn(array->items[i]);
   }
 
   FreeVec(array);

@@ -25,7 +25,7 @@ typedef struct PointerArray {
   NEAPointer *pointers;
   NEAInteger count;
   FreeArrayItemFn freeFn;
-} Array;
+} PointerArray;
 
 typedef struct StringArray {
   NEAString *strings;
@@ -43,7 +43,7 @@ typedef struct DecimalArray {
   NEADecimal **decimals;
   NEAUInteger count;
   FreeArrayItemFn freeFn;
-} IntegerArray;
+} DecimalArray;
 
 typedef struct ByteArray {
   NEAByte **bytes;
