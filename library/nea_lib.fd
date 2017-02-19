@@ -48,5 +48,9 @@ HasLMapTypeForKey(map,key,type)(A0,A1,D0)
 GetAllLMapValuesForKey(map,key)(A0,A1)
 LMapToString(buffer,map,verbose)(A0,D0)
 LMapNodeToString(buffer,node,verbose)(A0,D0)
+StringCreate(fromString)(A0)
+StringDuplicate(copyThisString)(A0)
+StringRemove(instance)(A0)
+StringConcat(instance,addMe)(A0,A1)
 ##private
 ##end

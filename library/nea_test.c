@@ -13,6 +13,7 @@ quit
 #include <proto/dos.h>
 #include <exec/libraries.h>
 
+#include <nea/core/strings.h>
 #include <nea/types.h>
 #include <nea/file/strings.h>
 #include <nea/util/version.h>
@@ -21,6 +22,7 @@ quit
 
 struct Library *NEABase = 0L;
 
+void testStrings(void);
 void testFileStrings(void);
 void setup(void);
 void teardown(void);
@@ -28,6 +30,7 @@ void teardown(void);
 int main(int argc, char **argv) {
   setup();
   testFileStrings();
+  testStrings();
   teardown();
 
   return 0;
@@ -49,6 +52,36 @@ void teardown() {
     CloseLibrary(NEABase);
     printf("nea.library closed.\n");
   }
+}
+
+void testStrings() {
+  StringPtr string;
+  NEAChar sourceA[8] = "Brielle";
+  NEAChar sourceB[8] = "Brielle"; 
+  
+  string = StringCreate(sourceA);
+  printf("\nStringCreate() test\n\n");
+  printf("String: %s\n", *string);
+  printf("Length: %lu\n", string->length);
+  
+  printf("\nModifying\n");
+  strcpy(sourceA, "Lucyann");
+  
+  printf("String: %s\n", *string);
+  printf("Length: %lu\n", string->length);
+  StringRemove(string);
+  
+  printf("\nStringDuplicate() test\n\n");
+  string = StringDuplicate(sourceB);
+  printf("String: %s\n", *string);
+  printf("Length: %lu\n", string->length);
+  
+  printf("\nModifying\n");
+  strcpy(sourceB, "Lucille");
+  
+  printf("String: %s\n", *string);
+  printf("Length: %lu\n", string->length);
+  StringRemove(string);
 }
 
 void testFileStrings() {

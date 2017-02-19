@@ -45,3 +45,7 @@
 #pragma libcall NEABase GetAllLMapValuesForKey 126 9802
 #pragma libcall NEABase LMapToString 12c 0802
 #pragma libcall NEABase LMapNodeToString 132 0802
+#pragma libcall NEABase StringCreate 138 801
+#pragma libcall NEABase StringDuplicate 13e 801
+#pragma libcall NEABase StringRemove 144 801
+#pragma libcall NEABase StringConcat 14a 9802
