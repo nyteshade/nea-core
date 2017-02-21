@@ -10,7 +10,7 @@
 
 MODNAME=     nea
 VERSION=     37
-REVISION=    6
+REVISION=    12
 
 IDIR=        /src
 LIBFILE=     $(MODNAME).library
@@ -21,9 +21,9 @@ PRAGMA_FILE= /src/nea/pragmas/$(MODNAME)_pragmas.h
 PROTO_FILE=  /src/nea/proto/$(MODNAME).h
 
 C_COMPILER=  SC:C/SC
-C_OPTS=      STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
+C_OPTS=      DEBUG=full STREQ STRMER NOSTKCHK LIBCODE IDIR $(IDIR)
 
-LINKER=      SC:C/SLINK
+LINKER=      SC:C/SLINK addsym
 
 UTIL_SRCS=   $(IDIR)/nea/util/lmap.c $(IDIR)/nea/util/version.c
 CORE_SRCS=   $(IDIR)/nea/core/strings.c $(IDIR)/nea/core/arrays.c

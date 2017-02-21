@@ -1,0 +1,6 @@
+smake clean
+smake 
+smake pragmas
+smake reload
+execute nea_test.c
+nea_test
